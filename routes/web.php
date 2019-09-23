@@ -1,5 +1,6 @@
 <?php
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,6 +12,18 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['middleware'=>'auth'], function() {
+	Route::resource('projects', 'ProjectController');
+	
+	Route::get('/', 'ProjectController@index');
+
+	Route::post('/projects/{project}/invitations', 'ProjectInvitationController@store');
+	Route::post('/projects/{project}/tasks', 'ProjectTaskController@store');
+
+	Route::patch('/tasks/{task}', 'ProjectTaskController@update');	
 });
+
+
+Auth::routes();
+
+
